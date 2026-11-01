@@ -38,4 +38,4 @@ jobs:
       # Always >= 3.13 here: this job renders only when the project's
       # baseline interpreter satisfies the shared workflow's helper
       # scripts.
-      python-version: "3.15"
+      python-version: "3.14"

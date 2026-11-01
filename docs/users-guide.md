@@ -22,14 +22,15 @@ Run `make markdownlint` separately to lint Markdown and run the same spelling
 gate. Run `make audit` separately to check dependencies with `pip-audit` and,
 when Rust is enabled, `cargo audit`.
 
-The Python baseline is `3.15` (minimum: 3.12).
+The Python baseline is `3.14` (minimum: 3.12). The `.python-version` file
+selects Python 3.14 for local uv commands.
 
 Git discovers Python sources from tracked and untracked files, including hidden
 action directories. `lint-python` runs Ruff 0.16.8 and Interrogate for 100%
 docstring coverage, followed by the pinned base Pylint (`PYLINT_VERSION`). It
 uses the interpreter selected for the baseline:
 
-uv-managed CPython 3.15 (`PYLINT_PYTHON`)
+uv-managed CPython 3.14 (`PYLINT_PYTHON`)
 
 The base sweep keeps `syntax-error` enabled, so a module that the interpreter
 cannot parse fails linting rather than being skipped.
@@ -83,9 +84,8 @@ daily at 09:30 UTC and can also be started manually from GitHub Actions. Adjust
 the generated cron schedule to stagger it against other repositories.
 
 For projects whose minimum Python version is 3.13 or newer, the workflow runs
-mutmut against `jobsworth/`. The Python mutation job is omitted for
-older baselines because the shared workflow helpers require Python 3.13 or
-newer.
+mutmut against `jobsworth/`. The Python mutation job is omitted for older
+baselines because the shared workflow helpers require Python 3.13 or newer.
 
 ## Rust Test Behaviour
 
@@ -112,6 +112,21 @@ This sets `RUN_ACT_VALIDATION=1` for the pytest invocation, enabling the
 act-based integration tests that run the generated CI workflow locally. Omitting
 `WITH_ACT` (or setting it to `0`) skips act validation; the rest of the test
 suite runs unchanged.
+
+## Refreshing shared documentation
+
+Preview updates to existing reference documents with:
+
+```bash
+uv run --script scripts/docs_refresh.py --dry-run
+```
+
+Omit `--dry-run` to replace matching documents with the latest versions from
+`leynos/agent-helper-scripts` on `main`. This overwrites local edits to shared
+documents; review the resulting Git diff. Project-specific documents are left
+untouched. See the
+[developer guide](developers-guide.md#refreshing-shared-documentation) for
+matching rules and directory options.
 
 ## Cleaning Local State
 

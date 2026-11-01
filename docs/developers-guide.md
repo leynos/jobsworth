@@ -50,6 +50,33 @@ Python dependencies, and Rust-enabled projects also run `cargo audit` from the
 
 ## Automation scripts
 
+### Refreshing shared documentation
+
+Run `uv run --script scripts/docs_refresh.py --dry-run` to preview updates,
+then omit `--dry-run` to apply them. The script downloads a single snapshot of
+`leynos/agent-helper-scripts` on `main` and replaces existing files under
+`docs/` whose relative paths match files in `documentation-library/`.
+
+The refresh helper is specific to this maintenance command; it is not an
+application interface. Matching uses the complete relative path, including
+subdirectories. Project-specific documents and symbolic links are skipped, and
+missing documents are not added. Identical files are left untouched. Reference
+copies replace the entire local document, including local edits; review the Git
+diff after refreshing. Download or archive errors stop the command before any
+document writes.
+
+The default target is this checkout's `docs/`, independent of the current
+working directory. Use `--docs-dir /path/to/project/docs` to target another
+directory. Cyclopts provides the CLI; standard-library HTTPS and ZIP handling
+avoid external command dependencies. Tests exercise the CLI with an in-memory
+upstream archive, plus byte-level convergence properties.
+
+Behavioural tests use pytest-bdd step decorators. Vulture recognizes
+`@given_step`, `@when`, and `@then` as runtime entry points; unregistered test
+helpers remain subject to the dead-code gate.
+
+### Script conventions
+
 The [Scripting standards](scripting-standards.md) document provides guidance
 for adding or updating helper scripts. New and updated scripts are expected to
 use `Cyclopts` for command-line interfaces, `cuprum` for typed and

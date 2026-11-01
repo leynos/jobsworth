@@ -87,7 +87,7 @@
       coverage. Git discovers tracked and untracked Python sources, including
       hidden action directories. The base Pylint sweep covers
       `$(PYLINT_TARGETS)` using the interpreter selected for the baseline:
-      uv-managed CPython 3.15.
+      uv-managed CPython 3.14.
       The minimum Python baseline is 3.12. DF12 Python Lints is pinned to
       v0.4.0; it and Ambrleaks, Skylos, Vulture, and the duplication detector
       run as isolated tools on Python 3.14. Ambrleaks checks `tests/`, Skylos

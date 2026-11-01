@@ -37,8 +37,8 @@ AMBRLEAKS = $(UV_ENV) $(UV) tool run --python $(LINT_PYTHON) --from '$(DF12_PYTH
 SKYLOS = $(UV_ENV) $(UV) tool run --python $(LINT_PYTHON) --from 'df12-python-lints[skylos] @ $(DF12_PYTHON_LINTS)' df12-skylos
 DUPLICATION_GATE = $(UV_ENV) $(UV) tool run --python $(LINT_PYTHON) --from '$(DF12_PYTHON_LINTS)' df12-duplication
 # Pylint runs on CPython at the project baseline: no managed PyPy parses
-# Python 3.15 syntax.
-PYLINT_PYTHON ?= cpython@3.15
+# Python 3.14 syntax.
+PYLINT_PYTHON ?= cpython@3.14
 PYLINT_VERSION ?= 4.0.9
 PYLINT_TARGETS ?= $(PYTHON_TARGETS)
 PYLINT = $(UV_ENV) $(UV) tool run --managed-python --python $(PYLINT_PYTHON) --from 'pylint==$(PYLINT_VERSION)' pylint
@@ -62,7 +62,7 @@ define ensure_uv
 	}
 endef
 
-.venv: pyproject.toml
+.venv: pyproject.toml .python-version
 	$(call ensure_uv)
 	$(UV_ENV) $(UV) venv --clear
 

@@ -1,15 +1,17 @@
 [project]
 name = "jobsworth"
 version = "0.1.0"
-description = "jobsworth package"
+description = "Vulnerabilities? More than me job's worth, mate."
 readme = "README.md"
-requires-python = ">=3.15"
+requires-python = ">=3.14"
 license = { text = "ISC" }
 dependencies = []
 
 [dependency-groups]
 dev = [
     "pytest",
+    "pytest-bdd",
+    "hypothesis",
     "interrogate",
     "pip-audit",
     "ruff==0.16.8",
@@ -25,7 +27,7 @@ dev = [
 [tool.ruff]
 line-length = 88
 preview = true
-target-version = "py315"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = [
@@ -166,7 +168,7 @@ max-bool-expr = 2
 max-locals = 10
 
 [tool.pylint.main]
-py-version = "3.15"
+py-version = "3.14"
 recursive = true
 max-module-lines = 400
 
@@ -324,6 +326,8 @@ exclude = [".venv/**", ".uv-cache/**", ".uv-tools/**", ".tools/**", ".git/**"]
 # their function bodies and all other definitions remain checked.
 [tool.vulture]
 ignore_names = ["test_*", "pytestmark"]
+# pytest-bdd registers these step functions as runtime entry points.
+ignore_decorators = ["@given_step", "@when", "@then"]
 min_confidence = 60
 
 [tool.mutmut]

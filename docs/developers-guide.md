@@ -115,9 +115,10 @@ actions under `.github/`.
 - `.github/workflows/build-wheels.yml` is a reusable workflow for extension
   builds. It accepts a Python version and builds wheels across Linux, Windows,
   and macOS architectures via `.github/actions/build-wheels`.
-- `.github/workflows/get-codescene-sha.yml` is manually dispatched. It fetches
-  the CodeScene coverage CLI installer, computes its SHA-256 digest, and writes
-  the result to the `CODESCENE_CLI_SHA256` repository variable.
+- `.github/workflows/coverage-main.yml` is the one CodeScene publisher. It runs
+  on pushes to `main` and on manual dispatch, in the `codescene` environment,
+  and uploads coverage when that environment holds a token. Pull requests
+  measure and ratchet coverage in `ci.yml` without contacting CodeScene.
 
 - `.github/workflows/mutation-testing.yml` runs daily at 09:30 UTC and supports
   manual dispatch. It delegates to reusable workflows from
@@ -143,10 +144,10 @@ the Rust lint and test cache uses the `rust_extension -> target` workspace
 while retaining the tool-cache directories; Rust-specific cache configuration
 and tools remain conditional on the extension.
 
-The `CS_ACCESS_TOKEN` secret must be configured when CodeScene coverage upload
-is required. The `CODESCENE_CLI_SHA256` variable should be populated using the
-refresh workflow, so CI can verify the downloaded CodeScene installer before
-upload.
+The `CS_ACCESS_TOKEN` secret belongs in the `codescene` environment, whose
+deployment policy admits `main` alone. Without it the publisher records a
+skipped upload and the run still succeeds. `make test-workflow-contracts` holds
+this shape.
 
 ## Shared spelling configuration
 

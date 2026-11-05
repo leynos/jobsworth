@@ -11,9 +11,6 @@ permissions:
 jobs:
   lint-test:
     runs-on: ubuntu-latest
-    env:
-      CS_ACCESS_TOKEN: ${{ secrets.CS_ACCESS_TOKEN }}
-      CODESCENE_CLI_SHA256: ${{ vars.CODESCENE_CLI_SHA256 }}
 
     steps:
       - name: Check out repository
@@ -85,27 +82,23 @@ jobs:
         if: github.actor != 'dependabot[bot]'
         run: make audit
 
-      # Coverage runs on pull requests only. Pushes to main upload their
-      # own coverage (and advance the ratchet baseline) via
-      # coverage-main.yml, so generating it here as well would duplicate
-      # the work and the CodeScene upload for the same commit.
-      # The changed-line `cs-coverage check` gate is deliberately not wired
-      # in yet: CodeScene rejects `cs-coverage check` for any project whose
-      # coverage-gates configuration is absent ("Lacks the gates
-      # configuration."), which is a CodeScene-side, per-project setting
-      # rather than a CI defect. Once this repo is onboarded to CodeScene
-
-      # — set the `codescene_project_id` copier answer — and coverage-main.yml
-      # has uploaded to main at least once, add a `mode: check` step guarded
-      # on `CS_ACCESS_TOKEN != ''` with the project's
-      # `project-url: https://api.codescene.io/v2/projects/<id>`.
-
+      # Pull requests measure coverage and ratchet it; they never talk to
+      # CodeScene. The one publisher is coverage-main.yml, which runs on main in
+      # the codescene environment. Keep this selection identical to the one
+      # there: `make test-workflow-contracts` holds that shape.
       - name: Test and Measure Coverage
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: leynos/shared-actions/.github/actions/generate-coverage@ec1432aa6fa5379b2dd8f4b3402fd5b250a597bd
+        if: github.event_name == 'pull_request'
+        # Pin one interpreter in both lanes: generate-coverage builds its own
+        # venv with a bare `uv venv`, which takes whatever uv finds first.
+        env:
+          UV_PYTHON: '3.14'
+        uses: leynos/shared-actions/.github/actions/generate-coverage@872f59f53717b5bebe8e24b2f4a7496b089a939a
         with:
           output-path: coverage.xml
           format: cobertura
           artefact-name-suffix: jobsworth
-          publish-artefact: ${{ env.ACT != 'true' }}
           with-ratchet: 'true'
+          publish-artefact: 'false'
+
+      - name: Check the CV-005 contracts
+        run: make test-workflow-contracts

@@ -9,8 +9,9 @@ name: Coverage (main)
 # generate-coverage selection has to match the one below field for field.
 # `make test-workflow-contracts` holds that shape.
 #
-# With no CS_ACCESS_TOKEN in the codescene environment the shared uploader
-# records a skipped upload and the run still succeeds.
+# With no CS_ACCESS_TOKEN in the codescene environment the workflow skips the
+# shared uploader, writes a warning that nothing was published, and the run
+# still succeeds.
 #
 # Known exceptions. Merges the Dependabot automerge workflow makes with
 # GITHUB_TOKEN fire no push event, so they reach this workflow only through a

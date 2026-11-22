@@ -1,26 +1,7 @@
 # Documentation contents
 
-This page indexes the generated project's documentation. Browse the guides
-below.
-
-## Project guides
-
-- [User guide](users-guide.md) explains how to use the generated project and
-  its public build and test commands.
-- [Developer guide](developers-guide.md) explains the contributor workflow and
-  points maintainers to script automation standards.
-- [Documentation style guide](documentation-style-guide.md) defines the
-  spelling, structure, Markdown, Architecture Decision Record (ADR), Request
-  for Comments (RFC), and roadmap conventions used by this documentation set.
-
-## Engineering practice
-
-- [Complexity antipatterns and refactoring strategies](complexity-antipatterns-and-refactoring-strategies.md)
-  explains cognitive complexity, the bumpy-road antipattern, and refactoring
-  approaches for maintainable code.
-- [Local validation of GitHub Actions with act and pytest](local-validation-of-github-actions-with-act-and-pytest.md)
-  explains how to validate workflow behaviour locally before relying on remote
-  Continuous Integration (CI) runs.
-- [Scripting standards](scripting-standards.md) explains the preferred Python
-  scripting stack, command execution patterns, and test expectations for helper
-  scripts.
+- [Terms of reference](terms-of-reference.md): purpose, users, constraints, and acceptance criteria.
+- [Technical design](jobsworth-design.md): scanner contracts, policy composition, expiry, and evidence.
+- [GIST roadmap](roadmap.md): phased delivery.
+- [ADR 0001](adrs/adr-0001-scanner-and-policy-boundary.md): Python 3.14, Trivy, and Checkov.
+- [User guide](users-guide.md), [developer guide](developers-guide.md), [documentation style](documentation-style-guide.md), and [scripting standards](scripting-standards.md).
